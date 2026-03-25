@@ -1,0 +1,83 @@
+@startuml cop4331hw1 - Colors App
+
+title COP4331 HW1 - Colors Application\nLAMP Stack Architecture
+
+' ========================
+' DATABASE LAYER
+' ========================
+package "Database (MySQL)" {
+  class Users {
+    + ID : INT <<PK, AUTO_INCREMENT>>
+    + FirstName : VARCHAR(50)
+    + LastName : VARCHAR(50)
+    + Login : VARCHAR(50)
+    + Password : VARCHAR(50)
+  }
+
+  class Colors {
+    + ID : INT <<PK, AUTO_INCREMENT>>
+    + Name : VARCHAR(50)
+    + UserID : INT <<FK>>
+  }
+
+  Users "1" --o{ Colors : "has many"
+}
+
+' ========================
+' API LAYER (PHP)
+' ========================
+package "API Layer (PHP)" {
+  class UserAPI {
+    + register(FirstName, LastName, Login, Password) : JSON
+    + login(Login, Password) : JSON
+  }
+
+  class ColorAPI {
+    + addColor(Name, UserID) : JSON
+    + deleteColor(ID) : JSON
+    + getColors(UserID) : JSON
+  }
+}
+
+' ========================
+' FRONTEND LAYER
+' ========================
+package "Frontend (HTML / CSS / JS)" {
+  class IndexPage {
+    - loginForm : HTMLElement
+    - registerForm : HTMLElement
+    + handleLogin() : void
+    + handleRegister() : void
+    + redirectToDashboard() : void
+  }
+
+  class DashboardPage {
+    - colorList : HTMLElement
+    - addColorForm : HTMLElement
+    + loadColors(UserID) : void
+    + addColor(Name) : void
+    + deleteColor(ID) : void
+    + renderColors(colors[]) : void
+  }
+}
+
+' ========================
+' RELATIONSHIPS
+' ========================
+IndexPage    ..>  UserAPI   : "POST login/register"
+DashboardPage ..> ColorAPI  : "GET / POST / DELETE colors"
+ColorAPI     ..>  Colors    : "CRUD"
+UserAPI      ..>  Users     : "CRUD"
+
+note top of UserAPI
+  PHP scripts connect to
+  MySQL via mysqli()
+end note
+
+note right of DashboardPage
+  Authenticated session
+  required (UserID stored
+  after login)
+end note
+
+@enduml
