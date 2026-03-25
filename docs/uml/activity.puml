@@ -1,0 +1,64 @@
+@startuml activity
+
+title Colors App — Activity Diagram
+
+start
+
+:Open application (index.html);
+
+fork
+  :Fill in Register form;
+  :Submit registration;
+  if (Inputs valid?) then (yes)
+    :PHP inserts User into DB;
+    :Return success JSON;
+  else (no)
+    :Show error message;
+    stop
+  endif
+fork again
+  :Fill in Login form;
+  :Submit credentials;
+  if (Credentials match?) then (yes)
+    :Return userID in JSON;
+  else (no)
+    :Show error message;
+    stop
+  endif
+end fork
+
+:Redirect to Dashboard;
+
+:Load colors for userID\n(GET getColors.php);
+
+:Display color list;
+
+repeat
+
+  fork
+    :Enter color name;
+    :Click "Add Color";
+    :POST addColor.php;
+    if (Color added?) then (yes)
+      :Refresh color list;
+    else (no)
+      :Show error;
+    endif
+  fork again
+    :Click "Delete" on a color;
+    :POST deleteColor.php;
+    if (Color deleted?) then (yes)
+      :Refresh color list;
+    else (no)
+      :Show error;
+    endif
+  end fork
+
+repeat while (Continue using app?) is (yes)
+-> no;
+
+:Log out / Close browser;
+
+stop
+
+@enduml

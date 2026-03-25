@@ -1,0 +1,70 @@
+@startuml class
+
+title Colors App — Class Diagram
+
+' ── Frontend ──────────────────────────────────────
+package "Frontend (JS / HTML)" {
+
+  class IndexPage {
+    - loginForm : HTMLElement
+    - registerForm : HTMLElement
+    + handleLogin(login: String, password: String) : void
+    + handleRegister(firstName: String, lastName: String, login: String, password: String) : void
+    + redirectToDashboard(userID: int) : void
+  }
+
+  class DashboardPage {
+    - userID : int
+    - colorList : HTMLElement
+    + loadColors() : void
+    + addColor(name: String) : void
+    + deleteColor(id: int) : void
+    + renderColors(colors: Array) : void
+  }
+}
+
+' ── API Layer ─────────────────────────────────────
+package "API Layer (PHP)" {
+
+  class UserAPI {
+    - db : mysqli
+    + register(firstName: String, lastName: String, login: String, password: String) : JSON
+    + login(login: String, password: String) : JSON
+  }
+
+  class ColorAPI {
+    - db : mysqli
+    + addColor(name: String, userID: int) : JSON
+    + deleteColor(id: int) : JSON
+    + getColors(userID: int) : JSON
+  }
+}
+
+' ── Database ──────────────────────────────────────
+package "Database (MySQL)" {
+
+  class Users {
+    + ID : int <<PK>>
+    + FirstName : varchar(50)
+    + LastName : varchar(50)
+    + Login : varchar(50)
+    + Password : varchar(50)
+  }
+
+  class Colors {
+    + ID : int <<PK>>
+    + Name : varchar(50)
+    + UserID : int <<FK>>
+  }
+}
+
+' ── Relationships ─────────────────────────────────
+IndexPage    ..> UserAPI   : "calls"
+DashboardPage ..> ColorAPI  : "calls"
+
+UserAPI  ..> Users  : "queries"
+ColorAPI ..> Colors : "queries"
+
+Users  "1" --o{ Colors : "owns"
+
+@enduml
