@@ -1,0 +1,20 @@
+{
+  "name": "cop4331hw1",
+  "version": "1.0.0",
+  "description": "The colors app is a simple application to keep track of the the colors for each of the individual users.",
+  "type": "module",
+  "main": "eslint.config.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github-work:JYSCN/cop4331hw1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
