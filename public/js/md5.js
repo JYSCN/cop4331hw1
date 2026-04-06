@@ -19,9 +19,8 @@
 
 /* global define */
 
-/* eslint-disable strict */
 
-;(function($) {
+; (function ($) {
   'use strict'
 
   /**
@@ -391,7 +390,7 @@
   }
 
   if (typeof define === 'function' && define.amd) {
-    define(function() {
+    define(function () {
       return md5
     })
   } else if (typeof module === 'object' && module.exports) {
