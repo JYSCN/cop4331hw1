@@ -1,0 +1,19 @@
+name: Linting
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Using Node
+              uses: actions/setup-node@v4
+            - name: setting up linters
+              run: |
+                npm install eslint . globals @eslint/css @html-eslint/eslint-plugin @html-eslint/parser @eslint/js
+                npx eslint . --max-warnings 0 
